@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "PowerShell(cmd /c \"dir c:\\\\portfolio_new /a /s\")",
-      "PowerShell(cmd /c \"dir c:\\\\portfolio_new\" 2>&1)"
+      "PowerShell(cmd /c \"dir c:\\\\portfolio_new\" 2>&1)",
+      "PowerShell(cmd /c \"dir c:\\\\portfolio_new /s /b\" 2>&1)",
+      "PowerShell(findstr /i \".png .jpg .jpeg .gif .svg .webp\")"
     ]
   }
 }
