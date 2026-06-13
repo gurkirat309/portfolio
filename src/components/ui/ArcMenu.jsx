@@ -15,37 +15,42 @@ const NAV = [
 ]
 
 const N       = NAV.length
-const A_START = 228   // angle for i=0  →  top of arc
-const A_END   = 132   // angle for i=N-1 → bottom of arc
+// Angles in degrees, centered at 0° (pointing RIGHT).
+// Negative = above center, positive = below center.
+const A_START = -36
+const A_END   =  36
 const SLAB_H  = 46
-const ARC_H   = 480   // fixed container height
-const CY      = ARC_H / 2   // 240
+const ARC_H   = 480
+const CY      = ARC_H / 2  // 240
 
 const toRad = d => d * Math.PI / 180
 
-// choose geometry based on viewport width
+// Circle center is OFF-SCREEN to the LEFT (CX < 0).
+// Slabs sit on the RIGHT side of the circle — "D" shape.
 function getGeo(winW) {
-  if (winW < 1024) return { R: 220, CX: 320, SLAB_W: 150 }
-  return                  { R: 290, CX: 400, SLAB_W: 178 }
+  if (winW < 1024) return { R: 260, CX: -40, SLAB_W: 148 }
+  return                  { R: 320, CX: -60, SLAB_W: 175 }
 }
 
-// slab positions along the arc (computed once per geometry)
+// Returns { rx, y } — rx is the RIGHT edge of the slab (the arc contact point).
 function computeSlabs(CX, R) {
   return NAV.map((_, i) => {
     const deg = A_START + (A_END - A_START) * (i / (N - 1))
     const rad = toRad(deg)
-    return { x: CX + R * Math.cos(rad), y: CY + R * Math.sin(rad) }
+    return {
+      rx: CX + R * Math.cos(rad),
+      y:  CY + R * Math.sin(rad),
+    }
   })
 }
 
-// SVG "A" arc path — counter-clockwise (sweep=0) from angle a1 → a2
+// SVG arc path from angle a1 → a2, sweep=1 (clockwise) = "D" shape.
 function makeArcD(CX, R, a1, a2) {
   const x1 = (CX + R * Math.cos(toRad(a1))).toFixed(2)
   const y1 = (CY + R * Math.sin(toRad(a1))).toFixed(2)
   const x2 = (CX + R * Math.cos(toRad(a2))).toFixed(2)
   const y2 = (CY + R * Math.sin(toRad(a2))).toFixed(2)
-  // large-arc=0 (span <180°), sweep=0 (CCW → left arc)
-  return `M ${x1} ${y1} A ${R} ${R} 0 0 0 ${x2} ${y2}`
+  return `M ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2}`
 }
 
 export function ArcMenu({ currentScreen, setCurrentScreen }) {
@@ -60,11 +65,13 @@ export function ArcMenu({ currentScreen, setCurrentScreen }) {
   }, [])
 
   const { R, CX, SLAB_W } = useMemo(() => getGeo(winW), [winW])
-  const containerW = CX + 30
+
+  // Container only needs to reach the max right-edge of any slab
+  const containerW = CX + R + 20  // = max rx + 20
 
   const slabs    = useMemo(() => computeSlabs(CX, R), [CX, R])
-  const outerArc = useMemo(() => makeArcD(CX, R,      230, 130), [CX, R])
-  const innerArc = useMemo(() => makeArcD(CX, R - 18, 230, 130), [CX, R])
+  const outerArc = useMemo(() => makeArcD(CX, R,      A_START - 2, A_END + 2), [CX, R])
+  const innerArc = useMemo(() => makeArcD(CX, R - 18, A_START - 2, A_END + 2), [CX, R])
 
   return (
     <div
@@ -88,7 +95,6 @@ export function ArcMenu({ currentScreen, setCurrentScreen }) {
         style={{ position: 'absolute', inset: 0, overflow: 'visible' }}
         aria-hidden="true"
       >
-        {/* outer dashed spine */}
         <path
           d={outerArc}
           stroke="rgba(0,240,192,0.18)"
@@ -97,7 +103,6 @@ export function ArcMenu({ currentScreen, setCurrentScreen }) {
           strokeLinecap="round"
           fill="none"
         />
-        {/* inner depth arc */}
         <path
           d={innerArc}
           stroke="rgba(0,240,192,0.07)"
@@ -105,21 +110,25 @@ export function ArcMenu({ currentScreen, setCurrentScreen }) {
           strokeDasharray="2 8"
           fill="none"
         />
-        {/* node dots at each slab anchor */}
-        {slabs.map((pos, i) => (
+        {/* node dots at each slab's right-edge arc contact point */}
+        {slabs.map(({ rx, y }, i) => (
           <g key={i}>
-            <circle cx={pos.x.toFixed(2)} cy={pos.y.toFixed(2)} r="4"   fill="rgba(0,240,192,0.06)" />
-            <circle cx={pos.x.toFixed(2)} cy={pos.y.toFixed(2)} r="2.2" fill="rgba(0,240,192,0.22)" />
-            <circle cx={pos.x.toFixed(2)} cy={pos.y.toFixed(2)} r="1"   fill="rgba(0,240,192,0.55)" />
+            <circle cx={rx.toFixed(2)} cy={y.toFixed(2)} r="4"   fill="rgba(0,240,192,0.06)" />
+            <circle cx={rx.toFixed(2)} cy={y.toFixed(2)} r="2.2" fill="rgba(0,240,192,0.22)" />
+            <circle cx={rx.toFixed(2)} cy={y.toFixed(2)} r="1"   fill="rgba(0,240,192,0.55)" />
           </g>
         ))}
       </svg>
 
       {/* ── slab buttons ── */}
       {NAV.map((item, i) => {
-        const { x, y } = slabs[i]
+        const { rx, y } = slabs[i]
         const Icon = item.icon
         const isActive = currentScreen === item.id
+
+        // Slab left edge: right edge (rx) minus fixed width.
+        // max(0) keeps it from going off-screen.
+        const leftX = Math.max(0, Math.round(rx) - SLAB_W)
 
         return (
           <button
@@ -130,8 +139,8 @@ export function ArcMenu({ currentScreen, setCurrentScreen }) {
             className={`arc-slab${isActive ? ' arc-slab--active' : ''}`}
             style={{
               position: 'absolute',
-              left: Math.round(x),
-              top:  Math.round(y - SLAB_H / 2),
+              left:   leftX,
+              top:    Math.round(y - SLAB_H / 2),
               width:  SLAB_W,
               height: SLAB_H,
               pointerEvents: 'auto',
