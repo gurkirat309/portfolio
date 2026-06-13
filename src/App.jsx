@@ -55,7 +55,7 @@ export default function App() {
             <NavPanel currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
           </div>
 
-          <main className="flex-1 overflow-y-auto md:pl-44">
+          <main className="flex-1 overflow-y-auto md:pl-[300px] lg:pl-[375px]">
             <AnimatePresence mode="wait">
               <ActiveScreen
                 key={currentScreen}
