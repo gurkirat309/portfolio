@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
+import { Download } from 'lucide-react'
 import ProfileCard from '../components/ui/ProfileCard'
 import { GlassPanel } from '../components/ui/GlassPanel'
 import { profile } from '../data/profile'
-import { useToast } from '../context/ToastContext'
 
 const quickStats = [
   { label: 'LEVEL',    value: profile.level },
@@ -12,8 +12,6 @@ const quickStats = [
 ]
 
 export function MainMenu({ onEnter }) {
-  const { showToast } = useToast()
-
   return (
     <motion.div
       className="flex items-center justify-center h-full px-6 py-8"
@@ -82,19 +80,15 @@ export function MainMenu({ onEnter }) {
           </div>
 
           {/* CTA */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-            <button
-              onClick={onEnter}
-              className="font-orbitron text-sm tracking-widest px-8 py-3 border border-cyan text-cyan hover:bg-cyan/10 transition-all duration-200 uppercase relative group"
+          <div className="flex justify-center lg:justify-start">
+            <a
+              href="/genai_resume.pdf"
+              download="Gurkirat_Singh_Resume.pdf"
+              className="inline-flex items-center gap-2 font-orbitron text-sm tracking-widest px-8 py-3 border border-cyan text-cyan hover:bg-cyan/10 transition-all duration-200 uppercase"
             >
-              [ ENTER PORTFOLIO ]
-            </button>
-            <button
-              onClick={() => showToast('🔗 LINK COMING SOON — CHECK BACK')}
-              className="font-orbitron text-sm tracking-widest px-6 py-3 border border-[rgba(0,240,192,0.2)] text-text-muted hover:border-cyan/40 hover:text-text-bright transition-all duration-200 uppercase"
-            >
+              <Download size={16} />
               [ DOWNLOAD CV ]
-            </button>
+            </a>
           </div>
 
           {/* Decorative line */}
