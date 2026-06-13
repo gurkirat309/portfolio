@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cmd /c \"dir c:\\\\portfolio_new /a /s\")",
+      "PowerShell(cmd /c \"dir c:\\\\portfolio_new\" 2>&1)"
+    ]
+  }
+}

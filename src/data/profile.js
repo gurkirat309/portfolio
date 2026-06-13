@@ -1,0 +1,41 @@
+export const profile = {
+  name: 'Gurkirat Singh',
+  handle: 'GURKIRAT.EXE',
+  level: 12,
+  xp: { current: 7300, max: 10000 },
+  class: 'AI/ML Engineer',
+  guild: 'TensorHub Technologies',
+  location: 'Bangalore, India',
+  email: 'jaggigs309@gmail.com',
+  phone: '+91 6307722058',
+  github: '#',
+  linkedin: '#',
+  bio: 'Specializing in multi-agent systems, LLM orchestration, and RAG pipelines.',
+  stats: [
+    { name: 'AI / ML',      value: 92 },
+    { name: 'GenAI / LLM',  value: 95 },
+    { name: 'Backend Dev',  value: 80 },
+    { name: 'Frontend Dev', value: 82 },
+    { name: 'DevOps',       value: 68 },
+    { name: 'Research',     value: 75 },
+  ],
+  experience: [
+    {
+      role: 'Generative AI Intern',
+      company: 'TensorHub Technologies Pvt. Ltd.',
+      period: 'Mar 2026 – Present',
+      bullets: [
+        'Developed enterprise-grade multi-agent AI systems using LangGraph, LangChain, and LlamaIndex',
+        'Built a GitHub Multi-Agent System using GitHub MCP for automated PR creation',
+        'Engineered parallel agent execution pipelines using Redis and BullMQ',
+        'Implemented intelligent LLM and tool-routing mechanisms using Python',
+      ],
+    },
+    {
+      role: 'B.E. Computer Science (AI & ML)',
+      company: 'JSS Academy of Technical Education, Bangalore',
+      period: 'Aug 2023 – Jun 2027',
+      bullets: ['Specialization in Artificial Intelligence & Machine Learning'],
+    },
+  ],
+}
