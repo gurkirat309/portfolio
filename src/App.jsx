@@ -52,7 +52,7 @@ export default function App() {
             <AnimatePresence mode="wait">
               <ActiveScreen
                 key={currentScreen}
-                onEnter={() => setCurrentScreen('profile')}
+                onEnter={(screen) => setCurrentScreen(screen || 'profile')}
               />
             </AnimatePresence>
           </main>
