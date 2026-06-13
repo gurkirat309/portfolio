@@ -139,3 +139,192 @@ body {
 .arc-slab--active:focus-visible {
   transform: translateX(10px);
 }
+
+/* ─────────────────────────────────────────────
+   GAME LAYER — ambient world, HUD, rewards
+   ───────────────────────────────────────────── */
+
+/* HUD scanning sweep */
+@keyframes hud-scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.hud-scan::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 192, 0.06), transparent);
+  width: 40%;
+  animation: hud-scan 6s linear infinite;
+}
+
+/* moving shine on HUD xp bar */
+@keyframes bar-shine {
+  0%   { transform: translateX(-120%); }
+  60%  { transform: translateX(220%); }
+  100% { transform: translateX(220%); }
+}
+.hud-bar-shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  width: 30%;
+  animation: bar-shine 3.5s ease-in-out infinite;
+}
+
+/* reward banner sheen */
+@keyframes reward-sheen {
+  0%   { transform: translateX(-130%); }
+  100% { transform: translateX(230%); }
+}
+.reward-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 170, 0, 0.14), transparent);
+  animation: reward-sheen 2.4s ease-in-out infinite;
+}
+
+/* skill node scan ring on click */
+@keyframes skill-scan-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 240, 192, 0.55); opacity: 1; }
+  100% { box-shadow: 0 0 0 14px rgba(0, 240, 192, 0); opacity: 0; }
+}
+.skill-scan-ring {
+  animation: skill-scan-ring 0.65s ease-out forwards;
+}
+
+/* ambient perspective grid floor */
+@keyframes grid-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+.ambient-grid {
+  background-image:
+    linear-gradient(rgba(0, 240, 192, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 192, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  transform: perspective(420px) rotateX(62deg);
+  transform-origin: bottom center;
+  animation: grid-drift 7s linear infinite;
+  opacity: 0.55;
+}
+
+/* ambient radar sweep */
+@keyframes radar-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.ambient-radar {
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 240, 192, 0.10) 0deg,
+    rgba(0, 240, 192, 0.0) 55deg,
+    transparent 360deg
+  );
+  animation: radar-spin 9s linear infinite;
+}
+
+/* drifting data particles */
+@keyframes particle-rise {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(-100vh); opacity: 0; }
+}
+.ambient-particle {
+  bottom: -10px;
+  animation-name: particle-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hud-scan::before,
+  .hud-bar-shine,
+  .reward-sheen::after,
+  .ambient-grid,
+  .ambient-radar,
+  .ambient-particle,
+  .cursor-dot {
+    animation: none;
+  }
+}
+
+/* ── custom game cursor (targeting reticle) ── */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+@keyframes cursor-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 240, 192, 0.9); }
+  50%      { box-shadow: 0 0 14px rgba(0, 240, 192, 1); }
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00f0c0;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.25s ease, width 0.15s ease, height 0.15s ease;
+  animation: cursor-pulse 2s ease-in-out infinite;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.25s ease, width 0.18s ease, height 0.18s ease;
+}
+
+.cursor-corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid rgba(0, 240, 192, 0.55);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.cursor-corner.tl { top: 0;    left: 0;  border-right: none; border-bottom: none; }
+.cursor-corner.tr { top: 0;    right: 0; border-left: none;  border-bottom: none; }
+.cursor-corner.bl { bottom: 0; left: 0;  border-right: none; border-top: none; }
+.cursor-corner.br { bottom: 0; right: 0; border-left: none;  border-top: none; }
+
+/* lock-on over interactive elements — reticle grows + brackets brighten */
+.cursor-ring--lock {
+  width: 46px;
+  height: 46px;
+}
+.cursor-ring--lock .cursor-corner {
+  border-color: #00f0c0;
+  box-shadow: 0 0 6px rgba(0, 240, 192, 0.55);
+}
+
+/* click feedback — snap in + gold flash */
+.cursor-ring--click {
+  width: 24px;
+  height: 24px;
+}
+.cursor-ring--click .cursor-corner {
+  border-color: #ffaa00;
+  box-shadow: 0 0 6px rgba(255, 170, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot { animation: none; }
+}

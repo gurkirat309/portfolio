@@ -4,6 +4,7 @@ import { GlassPanel } from '../components/ui/GlassPanel'
 import { arsenal } from '../data/inventory'
 import { profile } from '../data/profile'
 import { useToast } from '../context/ToastContext'
+import { useGame } from '../context/GameContext'
 
 const dispatchLinks = [
   { label: 'GitHub',   icon: Github,   href: profile.github },
@@ -24,12 +25,16 @@ const categoryColors = {
 
 export function Inventory() {
   const { showToast } = useToast()
+  const { award } = useGame()
 
-  const handleLink = (e, href) => {
+  const handleLink = (e, href, label) => {
     if (!href || href === '#') {
       e.preventDefault()
       showToast('🔗 LINK COMING SOON — CHECK BACK')
+      return
     }
+    // Establishing a real channel grants operator XP (first time only).
+    award(`link:${label}`, 25, 'CHANNEL OPENED')
   }
 
   return (
@@ -77,7 +82,7 @@ export function Inventory() {
               <a
                 key={label}
                 href={href}
-                onClick={(e) => handleLink(e, href.startsWith('mailto:') ? null : href)}
+                onClick={(e) => handleLink(e, href, label)}
                 className="flex items-center justify-between w-full px-4 py-3 border border-cyan/20 hover:border-cyan text-text-muted hover:text-text-bright transition-all duration-150 group rounded-sm"
               >
                 <div className="flex items-center gap-3">

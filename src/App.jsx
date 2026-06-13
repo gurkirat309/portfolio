@@ -1,14 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ScanlineOverlay } from './components/layout/ScanlineOverlay'
 import { CornerBrackets } from './components/layout/CornerBrackets'
+import { AmbientFX } from './components/layout/AmbientFX'
 import { TopHUD } from './components/layout/TopHUD'
 import { BottomHUD } from './components/layout/BottomHUD'
 import { NavPanel } from './components/layout/NavPanel'
 import { ArcMenu } from './components/ui/ArcMenu'
 import { BootScreen } from './components/BootScreen'
 import { ToastNotification } from './components/ui/ToastNotification'
+import { RewardLayer } from './components/game/RewardLayer'
+import { CustomCursor } from './components/game/CustomCursor'
 import { ToastProvider } from './context/ToastContext'
+import { GameProvider, useGame } from './context/GameContext'
 
 import { MainMenu } from './screens/MainMenu'
 import { CharacterProfile } from './screens/CharacterProfile'
@@ -28,46 +32,63 @@ const screens = {
   connections:  Connections,
 }
 
-export default function App() {
+function Shell() {
   const [booted, setBooted] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('menu')
+  const { discover } = useGame()
 
   const ActiveScreen = screens[currentScreen] || MainMenu
 
+  // Visiting a screen for the first time (after boot) discovers that sector.
+  useEffect(() => {
+    if (booted) discover(currentScreen)
+  }, [booted, currentScreen, discover])
+
   return (
-    <ToastProvider>
-      <div className="relative min-h-screen bg-void font-rajdhani overflow-hidden">
-        <ScanlineOverlay />
-        <CornerBrackets />
-        <TopHUD />
+    <div className="relative min-h-screen bg-void font-rajdhani overflow-hidden">
+      <AmbientFX />
+      <ScanlineOverlay />
+      <CornerBrackets />
+      <TopHUD />
 
-        {!booted && <BootScreen onComplete={() => setBooted(true)} />}
+      {!booted && <BootScreen onComplete={() => setBooted(true)} />}
 
-        {/* Arc menu — fixed overlay, desktop only */}
-        <ArcMenu currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+      {/* Arc menu — fixed overlay, desktop only */}
+      <ArcMenu currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
 
-        <div
-          className="flex"
-          style={{ height: 'calc(100vh - 52px - 36px)', marginTop: 52 }}
-        >
-          {/* Sidebar nav — mobile only */}
-          <div className="md:hidden flex-shrink-0">
-            <NavPanel currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
-          </div>
-
-          <main className="flex-1 overflow-y-auto md:pl-[300px] lg:pl-[375px]">
-            <AnimatePresence mode="wait">
-              <ActiveScreen
-                key={currentScreen}
-                onEnter={(screen) => setCurrentScreen(screen || 'profile')}
-              />
-            </AnimatePresence>
-          </main>
+      <div
+        className="relative z-10 flex"
+        style={{ height: 'calc(100vh - 52px - 36px)', marginTop: 52 }}
+      >
+        {/* Sidebar nav — mobile only */}
+        <div className="md:hidden flex-shrink-0">
+          <NavPanel currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
         </div>
 
-        <BottomHUD />
-        <ToastNotification />
+        <main className="flex-1 overflow-y-auto md:pl-[300px] lg:pl-[375px]">
+          <AnimatePresence mode="wait">
+            <ActiveScreen
+              key={currentScreen}
+              onEnter={(screen) => setCurrentScreen(screen || 'profile')}
+            />
+          </AnimatePresence>
+        </main>
       </div>
-    </ToastProvider>
+
+      <BottomHUD />
+      <ToastNotification />
+      <RewardLayer />
+      <CustomCursor />
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <GameProvider>
+      <ToastProvider>
+        <Shell />
+      </ToastProvider>
+    </GameProvider>
   )
 }
