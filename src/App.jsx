@@ -5,6 +5,7 @@ import { CornerBrackets } from './components/layout/CornerBrackets'
 import { TopHUD } from './components/layout/TopHUD'
 import { BottomHUD } from './components/layout/BottomHUD'
 import { NavPanel } from './components/layout/NavPanel'
+import { ArcMenu } from './components/ui/ArcMenu'
 import { BootScreen } from './components/BootScreen'
 import { ToastNotification } from './components/ui/ToastNotification'
 import { ToastProvider } from './context/ToastContext'
@@ -42,13 +43,19 @@ export default function App() {
 
         {!booted && <BootScreen onComplete={() => setBooted(true)} />}
 
+        {/* Arc menu — fixed overlay, desktop only */}
+        <ArcMenu currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+
         <div
           className="flex"
           style={{ height: 'calc(100vh - 52px - 36px)', marginTop: 52 }}
         >
-          <NavPanel currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+          {/* Sidebar nav — mobile only */}
+          <div className="md:hidden flex-shrink-0">
+            <NavPanel currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+          </div>
 
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto md:pl-44">
             <AnimatePresence mode="wait">
               <ActiveScreen
                 key={currentScreen}
