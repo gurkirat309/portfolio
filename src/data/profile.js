@@ -8,8 +8,8 @@ export const profile = {
   location: 'Bangalore, India',
   email: 'jaggigs309@gmail.com',
   phone: '+91 6307722058',
-  github: '#',
-  linkedin: '#',
+  github: 'https://github.com/gurkirat309',
+  linkedin: 'https://www.linkedin.com/in/gurkirat-singh-ai/',
   bio: 'Specializing in multi-agent systems, LLM orchestration, and RAG pipelines.',
   stats: [
     { name: 'AI / ML',      value: 92 },
