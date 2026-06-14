@@ -36,6 +36,7 @@ const screens = {
 function Shell() {
   const [booted, setBooted] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('menu')
+  const [fridayOpen, setFridayOpen] = useState(false)
   const { discover } = useGame()
 
   const ActiveScreen = screens[currentScreen] || MainMenu
@@ -71,6 +72,7 @@ function Shell() {
             <ActiveScreen
               key={currentScreen}
               onEnter={(screen) => setCurrentScreen(screen || 'profile')}
+              onOpenFriday={() => setFridayOpen(true)}
             />
           </AnimatePresence>
         </main>
@@ -79,7 +81,7 @@ function Shell() {
       <BottomHUD />
       <ToastNotification />
       <RewardLayer />
-      <FridayChat />
+      <FridayChat open={fridayOpen} setOpen={setFridayOpen} />
       <CustomCursor />
     </div>
   )

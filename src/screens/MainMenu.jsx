@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Download } from 'lucide-react'
+import { Download, Bot } from 'lucide-react'
 import ProfileCard from '../components/ui/ProfileCard'
 import { GlassPanel } from '../components/ui/GlassPanel'
 import { profile } from '../data/profile'
@@ -11,7 +11,7 @@ const quickStats = [
   { label: 'WINS',     value: '4' },
 ]
 
-export function MainMenu({ onEnter }) {
+export function MainMenu({ onEnter, onOpenFriday }) {
   return (
     <motion.div
       className="flex items-center justify-center h-full px-6 py-8"
@@ -80,11 +80,19 @@ export function MainMenu({ onEnter }) {
           </div>
 
           {/* CTA */}
-          <div className="flex justify-center lg:justify-start">
+          <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+            <button
+              onClick={onOpenFriday}
+              className="group relative inline-flex items-center gap-2.5 font-orbitron text-sm tracking-widest px-7 py-3 bg-cyan/10 border border-cyan text-cyan hover:bg-cyan/20 hover:shadow-[0_0_24px_rgba(0,240,192,0.4)] transition-all duration-200 uppercase overflow-hidden"
+            >
+              <span className="absolute left-0 top-0 h-full w-1 bg-cyan animate-pulse" />
+              <Bot size={17} className="group-hover:scale-110 transition-transform" />
+              CHAT WITH F.R.I.D.A.Y
+            </button>
             <a
               href="/genai_resume.pdf"
               download="Gurkirat_Singh_Resume.pdf"
-              className="inline-flex items-center gap-2 font-orbitron text-sm tracking-widest px-8 py-3 border border-cyan text-cyan hover:bg-cyan/10 transition-all duration-200 uppercase"
+              className="inline-flex items-center gap-2 font-orbitron text-sm tracking-widest px-7 py-3 border border-cyan/40 text-cyan/80 hover:border-cyan hover:text-cyan hover:bg-cyan/10 transition-all duration-200 uppercase"
             >
               <Download size={16} />
               [ DOWNLOAD CV ]

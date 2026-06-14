@@ -38,9 +38,8 @@ function Typewriter({ text, onDone, onTick }) {
   )
 }
 
-export function FridayChat() {
+export function FridayChat({ open, setOpen }) {
   const { award } = useGame()
-  const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [messages, setMessages] = useState([
@@ -55,14 +54,14 @@ export function FridayChat() {
 
   useEffect(() => { scrollToBottom() }, [messages, loading, scrollToBottom])
 
+  // Award XP the first time FRIDAY is opened (deduped in GameContext).
+  useEffect(() => {
+    if (open) award('friday:online', 50, 'FRIDAY ONLINE')
+  }, [open, award])
+
   const markRevealed = useCallback((idx) => {
     setMessages(prev => prev.map((m, i) => (i === idx ? { ...m, revealed: true } : m)))
   }, [])
-
-  const openPanel = () => {
-    setOpen(true)
-    award('friday:online', 50, 'FRIDAY ONLINE') // first-open XP, deduped
-  }
 
   const send = async (text) => {
     const query = (text ?? input).trim()
@@ -109,7 +108,7 @@ export function FridayChat() {
     <>
       {/* Launcher */}
       <motion.button
-        onClick={() => (open ? setOpen(false) : openPanel())}
+        onClick={() => setOpen(!open)}
         className="fixed bottom-[52px] right-5 z-[60] w-14 h-14 rounded-full flex items-center justify-center border border-cyan/50 bg-void/90 text-cyan shadow-[0_0_22px_rgba(0,240,192,0.3)] hover:shadow-[0_0_30px_rgba(0,240,192,0.5)] transition-shadow"
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
