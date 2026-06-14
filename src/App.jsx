@@ -11,6 +11,7 @@ import { BootScreen } from './components/BootScreen'
 import { ToastNotification } from './components/ui/ToastNotification'
 import { RewardLayer } from './components/game/RewardLayer'
 import { CustomCursor } from './components/game/CustomCursor'
+import { FridayChat } from './components/game/FridayChat'
 import { ToastProvider } from './context/ToastContext'
 import { GameProvider, useGame } from './context/GameContext'
 
@@ -78,6 +79,7 @@ function Shell() {
       <BottomHUD />
       <ToastNotification />
       <RewardLayer />
+      <FridayChat />
       <CustomCursor />
     </div>
   )
