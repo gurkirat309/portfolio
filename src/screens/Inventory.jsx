@@ -45,10 +45,10 @@ export function Inventory() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      {/* Arsenal */}
+      {/* Tech Stack */}
       <GlassPanel>
         <div className="font-orbitron text-[10px] text-cyan/40 tracking-[3px] mb-5 uppercase">
-          // ARSENAL //
+          // TECH STACK //
         </div>
         <div className="flex flex-col gap-4">
           {Object.entries(arsenal).map(([category, items]) => (
