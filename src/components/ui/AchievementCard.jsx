@@ -9,7 +9,7 @@ export function AchievementCard({ achievement }) {
   const iconKey = toPascalCase(achievement.icon)
   const Icon = LucideIcons[iconKey] || LucideIcons.Star
 
-  // Photo card — used for hackathons (mirrors the project/quest card style).
+  // Photo card — hackathons and certs with images
   if (achievement.image) {
     return (
       <motion.div
@@ -38,11 +38,20 @@ export function AchievementCard({ achievement }) {
             <div className="font-rajdhani text-xs text-gold/80">{achievement.org}</div>
           </div>
         </div>
+
+        {/* description below the photo */}
+        {achievement.desc && (
+          <div className="px-3 py-2.5 border-t border-gold/10">
+            <p className="font-rajdhani text-xs text-text-muted leading-relaxed">
+              {achievement.desc}
+            </p>
+          </div>
+        )}
       </motion.div>
     )
   }
 
-  // Compact icon card — certifications & performance records (no photo).
+  // Compact icon card — performance records (no photo)
   return (
     <motion.div
       className="relative bg-panel border border-gold/20 rounded-sm p-4 panel-top-line cursor-default transition-all duration-200"
@@ -60,6 +69,11 @@ export function AchievementCard({ achievement }) {
           <span className="font-orbitron text-[9px] text-gold border border-gold/30 bg-gold/5 px-2 py-0.5 rounded-sm">
             {achievement.reward}
           </span>
+          {achievement.desc && (
+            <p className="font-rajdhani text-xs text-text-muted leading-relaxed mt-2">
+              {achievement.desc}
+            </p>
+          )}
         </div>
       </div>
     </motion.div>
