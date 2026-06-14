@@ -25,7 +25,7 @@ export function MainMenu({ onEnter }) {
         {/* LEFT — ProfileCard */}
         <div className="flex-shrink-0 w-full lg:w-auto flex justify-center">
           <ProfileCard
-            avatarUrl="/me.jpg"
+            avatarUrl="/me.jpeg"
             name="Gurkirat Singh"
             title="AI Engineer"
             handle="gurkirat309"
