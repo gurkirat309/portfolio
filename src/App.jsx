@@ -60,7 +60,7 @@ function Shell() {
 
       <div
         className="relative z-10 flex"
-        style={{ height: 'calc(100vh - 52px - 36px)', marginTop: 52 }}
+        style={{ height: 'calc(100dvh - 52px - 36px)', marginTop: 52 }}
       >
         {/* Sidebar nav — mobile only */}
         <div className="md:hidden flex-shrink-0">

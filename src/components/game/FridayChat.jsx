@@ -125,7 +125,7 @@ export function FridayChat({ open, setOpen }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-[120px] right-5 z-[60] w-[360px] max-w-[calc(100vw-2.5rem)] h-[480px] max-h-[calc(100vh-180px)] flex flex-col bg-void/95 border border-cyan/25 rounded-sm overflow-hidden panel-top-line backdrop-blur-sm shadow-[0_0_40px_rgba(0,0,0,0.6)]"
+            className="fixed bottom-[120px] right-5 z-[60] w-[360px] max-w-[calc(100vw-2.5rem)] h-[480px] max-h-[calc(100dvh-180px)] flex flex-col bg-void/95 border border-cyan/25 rounded-sm overflow-hidden panel-top-line backdrop-blur-sm shadow-[0_0_40px_rgba(0,0,0,0.6)]"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-cyan/15 bg-panel">
