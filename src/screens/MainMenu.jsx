@@ -14,7 +14,7 @@ const quickStats = [
 export function MainMenu({ onEnter, onOpenFriday }) {
   return (
     <motion.div
-      className="flex items-center justify-center h-full px-6 py-8"
+      className="flex items-start lg:items-center justify-center min-h-full px-4 sm:px-6 py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -51,10 +51,10 @@ export function MainMenu({ onEnter, onOpenFriday }) {
 
           {/* Name */}
           <div>
-            <h1 className="font-orbitron text-5xl xl:text-6xl font-black tracking-widest text-text-bright leading-none">
+            <h1 className="font-orbitron text-4xl sm:text-5xl xl:text-6xl font-black tracking-widest text-text-bright leading-none">
               GURKIRAT
             </h1>
-            <h1 className="font-orbitron text-5xl xl:text-6xl font-black tracking-widest text-cyan leading-none">
+            <h1 className="font-orbitron text-4xl sm:text-5xl xl:text-6xl font-black tracking-widest text-cyan leading-none">
               SINGH
             </h1>
           </div>

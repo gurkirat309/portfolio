@@ -414,6 +414,8 @@
 
 /* ── responsive ── */
 @media (max-width: 768px) {
+  /* allow vertical page scroll when touching the card (tilt is off on mobile) */
+  .pc-card-wrapper { touch-action: pan-y; }
   .pc-card { height: 70svh; max-height: 450px; }
   .pc-details { top: 1.8em; }
   .pc-details h3 { font-size: min(4svh, 2em); }

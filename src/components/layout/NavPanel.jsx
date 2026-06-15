@@ -21,10 +21,9 @@ export function NavPanel({ currentScreen, setCurrentScreen }) {
     <nav
       className="flex-shrink-0 flex flex-col"
       style={{
-        width: 200,
+        width: 56,
         borderRight: '1px solid rgba(0,240,192,0.08)',
         background: 'rgba(7,10,15,0.6)',
-        minWidth: 56,
       }}
     >
       {/* Nav items */}
